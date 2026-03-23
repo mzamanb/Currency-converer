@@ -129,7 +129,7 @@ function applyTheme() {
   if (els.fromCard) els.fromCard.style.backgroundColor = cardBg;
   if (els.toCard) els.toCard.style.backgroundColor = cardBg;
 
-  document.querySelectorAll('[data-key]').forEach((btn) => {
+  document.querySelectorAll("[data-key]").forEach((btn) => {
     const key = btn.getAttribute("data-key");
     const isBright = key === "swap-theme" || key === "backspace" || key === "ac" || key === "go";
     btn.style.backgroundColor = isBright ? brightBg : darkKeyBg;
