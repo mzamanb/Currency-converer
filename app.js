@@ -30,6 +30,8 @@ const els = {
   toCurrency: document.getElementById("toCurrency"),
   fromAmount: document.getElementById("fromAmount"),
   toAmount: document.getElementById("toAmount"),
+  fromCard: document.getElementById("fromCard"),
+  toCard: document.getElementById("toCard"),
   fromDropdownBtn: document.getElementById("fromDropdownBtn"),
   toDropdownBtn: document.getElementById("toDropdownBtn"),
   swapBtn: document.getElementById("swapBtn"),
@@ -41,8 +43,10 @@ const els = {
 
 let from = "AED";
 let to = "USD";
-let amountInput = "1000";
+let amountInput = "0";
 let sheetTarget = null; // "from" | "to"
+let lastFromText = "0";
+let lastToText = "0";
 
 // Fixed rates provided by the user (base USD, timestamp 03/23/2026).
 const ratesBase = "USD";
@@ -110,8 +114,43 @@ function updateUI() {
   const amount = parseAmount(amountInput);
   els.fromCurrency.textContent = from;
   els.toCurrency.textContent = to;
-  els.fromAmount.textContent = formatAmount(amount);
-  els.toAmount.textContent = formatAmount(convert(amount, from, to));
+  const fromText = formatAmount(amount);
+  const toText = formatAmount(convert(amount, from, to));
+
+  els.fromAmount.textContent = fromText;
+  els.toAmount.textContent = toText;
+
+  if (fromText !== lastFromText) bumpAmount(els.fromAmount);
+  if (toText !== lastToText) bumpAmount(els.toAmount);
+  lastFromText = fromText;
+  lastToText = toText;
+
+  applyInputCardStates(amount);
+}
+
+function bumpAmount(el) {
+  if (!el) return;
+  el.classList.add("is-bump");
+  setTimeout(() => el.classList.remove("is-bump"), 140);
+}
+
+function applyInputCardStates(amount) {
+  const fromCard = els.fromCard;
+  const toCard = els.toCard;
+  if (!fromCard || !toCard) return;
+
+  fromCard.classList.remove("state-default", "state-active", "state-filled");
+  toCard.classList.remove("state-default", "state-active", "state-filled");
+
+  // When selecting currencies, highlight whichever card is being configured.
+  const activeCard = sheetTarget === "to" ? "to" : "from";
+  fromCard.classList.add(activeCard === "from" ? "state-active" : "state-default");
+  toCard.classList.add(activeCard === "to" ? "state-active" : "state-default");
+
+  if (Math.abs(amount) > 0) {
+    fromCard.classList.add("state-filled");
+    toCard.classList.add("state-filled");
+  }
 }
 
 function applyFigmaTokenColors() {
@@ -199,11 +238,13 @@ function openSheet(target) {
   sheetTarget = target;
   els.sheetOverlay.classList.remove("hidden");
   renderSheet();
+  applyInputCardStates(parseAmount(amountInput));
 }
 
 function closeSheet() {
   sheetTarget = null;
   els.sheetOverlay.classList.add("hidden");
+  applyInputCardStates(parseAmount(amountInput));
 }
 
 function getMeta(code) {
