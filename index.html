@@ -34,14 +34,13 @@
         outline: 0;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
-      }
-      .key:active {
-        transform: scale(0.98);
+        transition: transform 100ms ease;
       }
       .key-shell {
         height: 94px;
         border-radius: 15px;
         padding: 21px;
+        transition: background-color 120ms ease;
       }
       .key-inner {
         height: 52px;
@@ -49,7 +48,30 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.17), 0 5px 4px 0 rgba(0, 0, 0, 0.25);
+        transition: transform 90ms ease, box-shadow 120ms ease, filter 120ms ease;
+      }
+      .key.dark .key-inner {
+        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.12), -2px -2px 4px 0 rgba(255, 255, 255, 0.17),
+          0 5px 4px 0 rgba(0, 0, 0, 0.25);
+      }
+      .key.bright .key-inner {
+        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.22), -2px -2px 4px 0 rgba(255, 255, 255, 0.15),
+          0 5px 4px 0 rgba(0, 0, 0, 0.22);
+      }
+      .key:active .key-inner,
+      .key.is-pressed .key-inner {
+        transform: translateY(2px) scale(0.985);
+        filter: saturate(0.96);
+      }
+      .key.dark:active .key-inner,
+      .key.dark.is-pressed .key-inner {
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .key.bright:active .key-inner,
+      .key.bright.is-pressed .key-inner {
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
     </style>
   </head>
@@ -79,12 +101,12 @@
           </div>
         </div>
 
-        <!-- Display cards (responsive, constrained to top 30%) -->
-        <div class="absolute left-0 top-[14%] h-[30%] w-full px-[16px] flex flex-col gap-[16px]">
+        <!-- Display cards -->
+        <div class="absolute left-0 top-[125px] w-full px-[16px] flex flex-col gap-[16px]">
           <!-- From card -->
           <div
             id="fromCard"
-            class="flex-1 min-h-0 bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
           >
             <div class="flex flex-col gap-[10px]">
               <div class="flex items-center justify-end gap-[8px] w-full">
@@ -124,7 +146,7 @@
           <!-- To card -->
           <div
             id="toCard"
-            class="flex-1 min-h-0 bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
           >
             <div class="flex flex-col gap-[10px]">
               <div class="flex items-center justify-end gap-[8px] w-full">
@@ -155,7 +177,7 @@
           <button
             id="swapBtn"
             type="button"
-            class="absolute -left-[8px] top-[calc(50%-20px)] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
+            class="absolute -left-[8px] top-[62px] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
             aria-label="Swap currencies"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">

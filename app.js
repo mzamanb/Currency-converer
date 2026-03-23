@@ -285,6 +285,8 @@ function renderSheet() {
 }
 
 function handleKey(key) {
+  flashKeyPress(key);
+
   switch (key) {
     case "ac":
       setAmountString("0");
@@ -319,9 +321,33 @@ function handleKey(key) {
   }
 }
 
+const pressTimers = new WeakMap();
+
+function flashKeyPress(key) {
+  if (typeof key !== "string") return;
+  const btn = document.querySelector(`[data-key="${key}"]`);
+  if (!btn) return;
+
+  btn.classList.add("is-pressed");
+  const existing = pressTimers.get(btn);
+  if (existing) clearTimeout(existing);
+
+  const t = setTimeout(() => {
+    btn.classList.remove("is-pressed");
+    pressTimers.delete(btn);
+  }, 110);
+  pressTimers.set(btn, t);
+}
+
 function wireUpKeypad() {
   document.querySelectorAll("[data-key]").forEach((btn) => {
     btn.addEventListener("click", () => handleKey(btn.getAttribute("data-key")));
+
+    // Keep pressed-state behavior responsive on pointer interactions.
+    btn.addEventListener("pointerdown", () => btn.classList.add("is-pressed"));
+    btn.addEventListener("pointerup", () => btn.classList.remove("is-pressed"));
+    btn.addEventListener("pointercancel", () => btn.classList.remove("is-pressed"));
+    btn.addEventListener("pointerleave", () => btn.classList.remove("is-pressed"));
   });
 }
 
