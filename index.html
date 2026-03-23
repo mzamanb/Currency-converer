@@ -79,12 +79,12 @@
           </div>
         </div>
 
-        <!-- Display cards -->
-        <div class="absolute left-0 top-[125px] w-full px-[16px] flex flex-col gap-[16px]">
+        <!-- Display cards (responsive, constrained to top 30%) -->
+        <div class="absolute left-0 top-[14%] h-[30%] w-full px-[16px] flex flex-col gap-[16px]">
           <!-- From card -->
           <div
             id="fromCard"
-            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+            class="flex-1 min-h-0 bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
           >
             <div class="flex flex-col gap-[10px]">
               <div class="flex items-center justify-end gap-[8px] w-full">
@@ -124,7 +124,7 @@
           <!-- To card -->
           <div
             id="toCard"
-            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+            class="flex-1 min-h-0 bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
           >
             <div class="flex flex-col gap-[10px]">
               <div class="flex items-center justify-end gap-[8px] w-full">
@@ -155,7 +155,7 @@
           <button
             id="swapBtn"
             type="button"
-            class="absolute -left-[8px] top-[62px] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
+            class="absolute -left-[8px] top-[calc(50%-20px)] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
             aria-label="Swap currencies"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -173,7 +173,7 @@
       </div>
 
       <!-- Keypad -->
-      <div class="relative z-10 absolute left-0 top-[370px] w-full px-[16px]">
+      <div class="relative z-10 absolute left-0 top-[52.5%] w-full px-[16px]">
         <div class="flex flex-col gap-[8px] w-full">
           <!-- Row 1 -->
           <div class="flex gap-[8px] w-full">
@@ -185,6 +185,9 @@
             </button>
             <button data-key="9" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
               <span class="key-inner w-full bg-[#3a4526]">9</span>
+            </button>
+            <button data-key="swap" class="key key-shell bright flex-1 dm-sans text-[24px] font-normal bg-[#b2e556]">
+              <span class="key-inner w-full bg-[#b2e556]">⇅</span>
             </button>
           </div>
 
@@ -199,6 +202,9 @@
             <button data-key="6" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
               <span class="key-inner w-full bg-[#3a4526]">6</span>
             </button>
+            <button data-key="backspace" class="key key-shell bright flex-1 dm-sans text-[24px] font-normal bg-[#b2e556]">
+              <span class="key-inner w-full bg-[#b2e556]">‹</span>
+            </button>
           </div>
 
           <!-- Row 3 -->
@@ -212,18 +218,21 @@
             <button data-key="3" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
               <span class="key-inner w-full bg-[#3a4526]">3</span>
             </button>
+            <button data-key="ac" class="key key-shell bright flex-1 dm-sans text-[24px] font-normal bg-[#b2e556]">
+              <span class="key-inner w-full bg-[#b2e556]">Clr</span>
+            </button>
           </div>
 
           <!-- Row 4 -->
           <div class="flex gap-[8px] w-full">
-            <button data-key="dot" class="key key-shell dark w-[93.75px] dm-sans text-[24px] font-normal bg-[#3a4526]">
-              <span class="key-inner w-full bg-[#3a4526]">.</span>
-            </button>
             <button data-key="0" class="key key-shell dark w-[194.5px] dm-sans text-[24px] font-normal bg-[#3a4526]">
               <span class="key-inner w-full bg-[#3a4526]">0</span>
             </button>
-            <button data-key="equals" class="key key-shell dark w-[93.75px] dm-sans text-[24px] font-normal bg-[#3a4526]">
-              <span class="key-inner w-full bg-[#3a4526]">Go</span>
+            <button data-key="dot" class="key key-shell dark w-[93.75px] dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">.</span>
+            </button>
+            <button data-key="equals" class="key key-shell bright w-[93.75px] dm-sans text-[24px] font-normal bg-[#b2e556]">
+              <span class="key-inner w-full bg-[#b2e556]">Go</span>
             </button>
           </div>
         </div>
@@ -241,7 +250,7 @@
 
         <div
           id="currencySheet"
-          class="absolute bottom-0 left-0 w-full bg-[#3a4526] flex flex-col gap-[24px] items-start overflow-clip px-[24px] py-[32px] rounded-[15px] shadow-[0px_4px_18px_rgba(0,0,0,0.35)]"
+          class="absolute bottom-0 left-0 w-full h-[75%] bg-[#3a4526] flex flex-col gap-[24px] items-start overflow-clip px-[24px] py-[32px] rounded-[15px] shadow-[0px_4px_18px_rgba(0,0,0,0.35)]"
         >
           <div class="content-stretch flex items-start justify-between relative shrink-0 w-full">
             <div class="content-stretch flex flex-col items-start leading-[normal] relative shrink-0 whitespace-nowrap">
@@ -264,8 +273,7 @@
 
           <div
             id="currencySheetList"
-            class="flex flex-col gap-[16px] w-full overflow-y-auto"
-            style="max-height: 62vh"
+            class="flex-1 min-h-0 flex flex-col gap-[16px] w-full overflow-y-auto"
           >
             <!-- populated by JS -->
           </div>

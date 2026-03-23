@@ -8,40 +8,22 @@ const figmaVars = {
   "Color/Disabled_BG": "#c8c8c8",
 };
 
-// Currency list + bottom-sheet display metadata.
-// (Content is illustrative; styling/token values come from your Figma variables.)
+// Currency list + metadata based on the provided rate table.
 const currencyMeta = {
-  AED: { name: "United Arab Emirates", symbol: "د.إ." },
   USD: { name: "United States", symbol: "$" },
   EUR: { name: "European Union", symbol: "€" },
   GBP: { name: "United Kingdom", symbol: "£" },
   JPY: { name: "Japan", symbol: "¥" },
-  INR: { name: "India", symbol: "₹" },
-  CAD: { name: "Canada", symbol: "$" },
-  AUD: { name: "Australia", symbol: "$" },
-  CHF: { name: "Switzerland", symbol: "Fr" },
   CNY: { name: "China", symbol: "¥" },
-  ILS: { name: "Israel", symbol: "₪" },
-  SGD: { name: "Singapore", symbol: "$" },
-  KRW: { name: "South Korea", symbol: "₩" },
-  MXN: { name: "Mexico", symbol: "$" },
-  RUB: { name: "Russia", symbol: "₽" },
-  TRY: { name: "Turkey", symbol: "₺" },
-  NZD: { name: "New Zealand", symbol: "$" },
+  AUD: { name: "Australia", symbol: "$" },
+  CAD: { name: "Canada", symbol: "$" },
+  CHF: { name: "Switzerland", symbol: "Fr" },
+  INR: { name: "India", symbol: "₹" },
   BRL: { name: "Brazil", symbol: "R$" },
-  ZAR: { name: "South Africa", symbol: "R" },
-  PLN: { name: "Poland", symbol: "zł" },
-  SEK: { name: "Sweden", symbol: "kr" },
-  NOK: { name: "Norway", symbol: "kr" },
-  DKK: { name: "Denmark", symbol: "kr" },
-  THB: { name: "Thailand", symbol: "฿" },
-  IDR: { name: "Indonesia", symbol: "Rp" },
-  PHP: { name: "Philippines", symbol: "₱" },
-  MYR: { name: "Malaysia", symbol: "RM" },
-  EGP: { name: "Egypt", symbol: "ج.م." },
+  AED: { name: "United Arab Emirates", symbol: "د.إ." },
 };
 
-const currencies = Object.keys(currencyMeta);
+const currencies = ["USD", "EUR", "GBP", "JPY", "CNY", "AUD", "CAD", "CHF", "INR", "BRL", "AED"];
 
 const els = {
   fromCurrency: document.getElementById("fromCurrency"),
@@ -62,13 +44,21 @@ let to = "USD";
 let amountInput = "1000";
 let sheetTarget = null; // "from" | "to"
 
-// ratesPerUSD: currency -> how many units of that currency equals 1 USD.
-// Example: if ratesPerUSD.EUR = 0.92, then 1 USD = 0.92 EUR.
-let ratesPerUSD = null;
-
-const fallbackRatesPerUSD = {
+// Fixed rates provided by the user (base USD, timestamp 03/23/2026).
+const ratesBase = "USD";
+const ratesTimestamp = "03/23/2026";
+const ratesPerUSD = {
   USD: 1,
-  AED: 10, // from Figma: 1000 AED -> 100 USD => 1 USD = 10 AED
+  EUR: 0.862709,
+  GBP: 0.749422,
+  JPY: 159.241372,
+  CNY: 6.886391,
+  AUD: 1.423656,
+  CAD: 1.372188,
+  CHF: 0.788041,
+  INR: 93.699948,
+  BRL: 5.312504,
+  AED: 3.67298,
 };
 
 function clampAmountString(str) {
@@ -105,20 +95,14 @@ function formatAmount(n) {
 }
 
 function convert(amount, fromCurrency, toCurrency) {
-  const f = ratesPerUSD?.[fromCurrency];
-  const t = ratesPerUSD?.[toCurrency];
+  const f = ratesPerUSD[fromCurrency];
+  const t = ratesPerUSD[toCurrency];
   if (typeof f === "number" && typeof t === "number") {
     // amount(from) -> USD -> amount(to)
     // amountUSD = amount / ratesPerUSD[from]
     // amountTo = amountUSD * ratesPerUSD[to]
     return (amount * t) / f;
   }
-
-  // Fallback only guarantees AED <-> USD.
-  const fb = fallbackRatesPerUSD;
-  const f2 = fb[fromCurrency];
-  const t2 = fb[toCurrency];
-  if (typeof f2 === "number" && typeof t2 === "number") return (amount * t2) / f2;
   return 0;
 }
 
@@ -401,20 +385,6 @@ function wireUpKeyboard() {
   });
 }
 
-async function loadRates() {
-  try {
-    // Public API: rates are "how many units per 1 USD"
-    const res = await fetch("https://open.er-api.com/v6/latest/USD", { cache: "no-store" });
-    const data = await res.json();
-    if (data && data.result === "success" && data.rates) {
-      // Clone + ensure USD exists.
-      ratesPerUSD = { ...data.rates, USD: 1 };
-    }
-  } catch {
-    // Keep fallback (AED <-> USD) if offline.
-  }
-}
-
 // Init
 applyFigmaTokenColors();
 wireUpKeypad();
@@ -422,7 +392,6 @@ wireUpSheet();
 wireUpSwap();
 wireUpKeyboard();
 updateUI();
-
-// Fetch rates then recompute.
-loadRates().finally(() => updateUI());
+void ratesBase;
+void ratesTimestamp;
 
