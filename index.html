@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Convertor</title>
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts (DM Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* SF Pro (closest cross-platform fallbacks) */
+      .sf-pro {
+        font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Helvetica, Arial, sans-serif;
+      }
+      .dm-sans {
+        font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      .key {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        outline: 0;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .key:active {
+        transform: scale(0.98);
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-black flex items-center justify-center p-4">
+    <!-- Phone frame -->
+    <div
+      id="phone"
+      class="relative w-[430px] h-[932px] overflow-hidden rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]"
+    >
+      <!-- Background gradient (from Figma) -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#3a4526] to-[#060606]" aria-hidden="true"></div>
+
+      <!-- Status + Header -->
+      <div class="relative z-10">
+        <div class="h-[54px] relative shrink-0 w-full">
+          <div class="absolute left-0 right-0 top-0 h-[54px] flex items-center justify-center">
+            <div class="sf-pro text-white font-semibold text-[17px] leading-[22px] tracking-[-0.43px]">
+              9:41
+            </div>
+          </div>
+        </div>
+
+        <div class="h-[55px] px-[24px] flex items-center justify-center">
+          <div class="sf-pro text-white font-medium text-[18px] tracking-[4.5px]">
+            Currency Convertor
+          </div>
+        </div>
+
+        <!-- Display cards -->
+        <div class="absolute left-0 top-[125px] w-full px-[16px] flex flex-col gap-[16px]">
+          <!-- From card -->
+          <div
+            id="fromCard"
+            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+          >
+            <div class="flex flex-col gap-[10px]">
+              <div class="flex items-center justify-end gap-[8px] w-full">
+                <button
+                  id="fromDropdownBtn"
+                  class="flex items-center justify-end gap-[8px] group select-none"
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="currencyDropdown"
+                  data-role="from"
+                >
+                  <!-- Chevron down -->
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="opacity-90">
+                    <path
+                      d="M3.5 6.5L8 11L12.5 6.5"
+                      stroke="#ffffff"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="dm-sans text-[#ffffff] font-medium text-[16px] leading-normal">
+                    <span id="fromCurrency">AED</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="w-full flex justify-end">
+                <div class="dm-sans font-extrabold text-[28px] leading-[0] text-[#ffffff] text-right">
+                  <span id="fromAmount">1000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- To card -->
+          <div
+            id="toCard"
+            class="bg-[rgba(255,255,255,0.2)] rounded-[15px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] px-[16px] pb-[24px] pt-[16px]"
+          >
+            <div class="flex flex-col gap-[10px]">
+              <div class="flex items-center justify-end gap-[8px] w-full">
+                <button
+                  id="toDropdownBtn"
+                  class="flex items-center justify-end select-none"
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="currencyDropdown"
+                  data-role="to"
+                >
+                  <span class="dm-sans text-[#ffffff] font-medium text-[16px] leading-normal">
+                    <span id="toCurrency">USD</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="w-full flex justify-end">
+                <div class="dm-sans font-extrabold text-[28px] leading-[0] text-[#ffffff] text-right">
+                  <span id="toAmount">100</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Swap button (left-floating arrow) -->
+          <button
+            id="swapBtn"
+            type="button"
+            class="absolute -left-[8px] top-[62px] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
+            aria-label="Swap currencies"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 5l-7 7 7 7"
+                stroke="#b2e556"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Currency dropdown -->
+        <div
+          id="currencyDropdown"
+          class="hidden absolute left-[16px] top-[210px] w-[240px] bg-[rgba(255,255,255,0.2)] rounded-[15px] px-[8px] py-[8px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] z-20"
+          role="listbox"
+          aria-label="Select currency"
+        >
+          <div id="dropdownItems" class="flex flex-col gap-[8px]">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Keypad -->
+      <div class="relative z-10 absolute left-0 top-[370px] w-full px-[16px]">
+        <div class="grid grid-cols-4 gap-[8px]">
+          <!-- Row 1 -->
+          <button data-key="ac" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            AC
+          </button>
+          <button data-key="sign" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            +/-
+          </button>
+          <button data-key="percent" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            %
+          </button>
+          <button data-key="swap" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
+            /
+          </button>
+
+          <!-- Row 2 -->
+          <button data-key="7" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            7
+          </button>
+          <button data-key="8" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            8
+          </button>
+          <button data-key="9" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            9
+          </button>
+          <button data-key="backspace" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
+            X
+          </button>
+
+          <!-- Row 3 -->
+          <button data-key="4" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            4
+          </button>
+          <button data-key="5" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            5
+          </button>
+          <button data-key="6" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            6
+          </button>
+          <button data-key="minus" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
+            -
+          </button>
+
+          <!-- Row 4 -->
+          <button data-key="1" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            1
+          </button>
+          <button data-key="2" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            2
+          </button>
+          <button data-key="3" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
+            3
+          </button>
+          <button data-key="plus" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
+            +
+          </button>
+
+          <!-- Row 5 -->
+          <button data-key="0" class="key dark col-span-2 h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526] flex items-center justify-center">
+            0
+          </button>
+          <button data-key="dot" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526] flex items-center justify-center">
+            .
+          </button>
+          <button data-key="equals" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556] flex items-center justify-center">
+            =
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
+
