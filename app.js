@@ -378,7 +378,15 @@ function wireUpSheet() {
 }
 
 function wireUpSwap() {
+  if (!els.swapBtn) return;
   els.swapBtn.addEventListener("click", () => swapCurrencies());
+}
+
+function fitPhoneToViewport() {
+  const vw = Math.max(320, window.innerWidth - 32);
+  const vh = Math.max(320, window.innerHeight - 32);
+  const scale = Math.min(1, vw / 430, vh / 932);
+  document.documentElement.style.setProperty("--phone-scale", String(scale));
 }
 
 function wireUpKeyboard() {
@@ -417,6 +425,8 @@ wireUpKeypad();
 wireUpSheet();
 wireUpSwap();
 wireUpKeyboard();
+fitPhoneToViewport();
+window.addEventListener("resize", fitPhoneToViewport);
 updateUI();
 void ratesBase;
 void ratesTimestamp;

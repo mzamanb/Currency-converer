@@ -17,6 +17,9 @@
     />
 
     <style>
+      :root {
+        --phone-scale: 1;
+      }
       /* SF Pro (closest cross-platform fallbacks) */
       .sf-pro {
         font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -73,15 +76,26 @@
       .key.bright.is-pressed .key-inner {
         box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
+      #phoneViewport {
+        position: relative;
+        width: calc(430px * var(--phone-scale));
+        height: calc(932px * var(--phone-scale));
+        flex: 0 0 auto;
+      }
+      #phone {
+        transform: scale(var(--phone-scale));
+        transform-origin: top left;
+      }
     </style>
   </head>
 
   <body class="min-h-screen bg-black flex items-center justify-center p-4">
-    <!-- Phone frame -->
-    <div
-      id="phone"
-      class="relative w-[430px] h-[932px] overflow-hidden rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]"
-    >
+    <div id="phoneViewport">
+      <!-- Phone frame -->
+      <div
+        id="phone"
+        class="relative w-[430px] h-[932px] overflow-hidden rounded-[15px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]"
+      >
       <!-- Background gradient (from Figma) -->
       <div class="absolute inset-0 bg-gradient-to-b from-[#3a4526] to-[#060606]" aria-hidden="true"></div>
 
@@ -173,23 +187,6 @@
             </div>
           </div>
 
-          <!-- Swap button (left-floating arrow) -->
-          <button
-            id="swapBtn"
-            type="button"
-            class="absolute -left-[8px] top-[62px] w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.23)] flex items-center justify-center"
-            aria-label="Swap currencies"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 5l-7 7 7 7"
-                stroke="#b2e556"
-                stroke-width="2.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
         </div>
 
       </div>
@@ -301,6 +298,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <script src="./app.js"></script>
