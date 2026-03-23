@@ -38,6 +38,19 @@
       .key:active {
         transform: scale(0.98);
       }
+      .key-shell {
+        height: 94px;
+        border-radius: 15px;
+        padding: 21px;
+      }
+      .key-inner {
+        height: 52px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: -2px -2px 4px 0 rgba(255, 255, 255, 0.17), 0 5px 4px 0 rgba(0, 0, 0, 0.25);
+      }
     </style>
   </head>
 
@@ -81,15 +94,15 @@
                   type="button"
                   aria-haspopup="listbox"
                   aria-expanded="false"
-                  aria-controls="currencyDropdown"
+                  aria-controls="currencySheetOverlay"
                   data-role="from"
                 >
                   <!-- Chevron down -->
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="opacity-90">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="opacity-95">
                     <path
-                      d="M3.5 6.5L8 11L12.5 6.5"
-                      stroke="#ffffff"
-                      stroke-width="1.6"
+                      d="M3.2 5.2L7 9L10.8 5.2"
+                      stroke="#b2e556"
+                      stroke-width="1.8"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
@@ -121,7 +134,7 @@
                   type="button"
                   aria-haspopup="listbox"
                   aria-expanded="false"
-                  aria-controls="currencyDropdown"
+                  aria-controls="currencySheetOverlay"
                   data-role="to"
                 >
                   <span class="dm-sans text-[#ffffff] font-medium text-[16px] leading-normal">
@@ -157,119 +170,105 @@
           </button>
         </div>
 
-        <!-- Currency bottom sheet -->
-        <div
-          id="currencySheetOverlay"
-          class="hidden absolute inset-0 z-20"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Currency selector"
-        >
-          <div class="absolute inset-0 bg-[rgba(0,0,0,0.35)]" data-role="backdrop"></div>
-
-          <div
-            id="currencySheet"
-            class="absolute bottom-0 left-0 w-full bg-[#3a4526] flex flex-col gap-[24px] items-start overflow-clip px-[24px] py-[32px] rounded-[15px] shadow-[0px_4px_18px_rgba(0,0,0,0.35)]"
-          >
-            <div class="content-stretch flex items-start justify-between relative shrink-0 w-full">
-              <div class="content-stretch flex flex-col items-start leading-[normal] relative shrink-0 whitespace-nowrap">
-                <p class="dm-sans font-normal relative shrink-0 text-[24px] text-[#ffffff]">
-                  Currency Symbols
-                </p>
-                <p class="dm-sans font-medium relative shrink-0 text-[16px] text-[#c8c8c8]">
-                  Select your currency you want to convert
-                </p>
-              </div>
-              <button
-                id="currencySheetCloseBtn"
-                type="button"
-                class="dm-sans w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.10)] text-[#ffffff] flex items-center justify-center"
-                aria-label="Close currency sheet"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div
-              id="currencySheetList"
-              class="flex flex-col gap-[16px] w-full overflow-y-auto"
-              style="max-height: 62vh"
-            >
-              <!-- populated by JS -->
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Keypad -->
       <div class="relative z-10 absolute left-0 top-[370px] w-full px-[16px]">
-        <div class="grid grid-cols-4 gap-[8px]">
+        <div class="flex flex-col gap-[8px] w-full">
           <!-- Row 1 -->
-          <button data-key="ac" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            AC
-          </button>
-          <button data-key="sign" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            +/-
-          </button>
-          <button data-key="percent" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            %
-          </button>
-          <button data-key="swap" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
-            /
-          </button>
+          <div class="flex gap-[8px] w-full">
+            <button data-key="7" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">7</span>
+            </button>
+            <button data-key="8" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">8</span>
+            </button>
+            <button data-key="9" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">9</span>
+            </button>
+          </div>
 
           <!-- Row 2 -->
-          <button data-key="7" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            7
-          </button>
-          <button data-key="8" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            8
-          </button>
-          <button data-key="9" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            9
-          </button>
-          <button data-key="backspace" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
-            X
-          </button>
+          <div class="flex gap-[8px] w-full">
+            <button data-key="4" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">4</span>
+            </button>
+            <button data-key="5" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">5</span>
+            </button>
+            <button data-key="6" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">6</span>
+            </button>
+          </div>
 
           <!-- Row 3 -->
-          <button data-key="4" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            4
-          </button>
-          <button data-key="5" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            5
-          </button>
-          <button data-key="6" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            6
-          </button>
-          <button data-key="minus" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
-            -
-          </button>
+          <div class="flex gap-[8px] w-full">
+            <button data-key="1" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">1</span>
+            </button>
+            <button data-key="2" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">2</span>
+            </button>
+            <button data-key="3" class="key key-shell dark flex-1 dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">3</span>
+            </button>
+          </div>
 
           <!-- Row 4 -->
-          <button data-key="1" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            1
-          </button>
-          <button data-key="2" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            2
-          </button>
-          <button data-key="3" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526]">
-            3
-          </button>
-          <button data-key="plus" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556]">
-            +
-          </button>
+          <div class="flex gap-[8px] w-full">
+            <button data-key="dot" class="key key-shell dark w-[93.75px] dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">.</span>
+            </button>
+            <button data-key="0" class="key key-shell dark w-[194.5px] dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">0</span>
+            </button>
+            <button data-key="equals" class="key key-shell dark w-[93.75px] dm-sans text-[24px] font-normal bg-[#3a4526]">
+              <span class="key-inner w-full bg-[#3a4526]">Go</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
-          <!-- Row 5 -->
-          <button data-key="0" class="key dark col-span-2 h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526] flex items-center justify-center">
-            0
-          </button>
-          <button data-key="dot" class="key dark h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-white font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#3a4526] flex items-center justify-center">
-            .
-          </button>
-          <button data-key="equals" class="key bright h-[52px] rounded-[15px] w-full dm-sans text-[24px] text-black font-normal shadow-[-2px_-2px_4px_0px_rgba(255,255,255,0.17),0px_5px_4px_0px_rgba(0,0,0,0.25)] bg-[#b2e556] flex items-center justify-center">
-            =
-          </button>
+      <!-- Currency bottom sheet overlay -->
+      <div
+        id="currencySheetOverlay"
+        class="hidden absolute inset-0 z-30"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Currency selector"
+      >
+        <div class="absolute inset-0 bg-[rgba(0,0,0,0.35)]" data-role="backdrop"></div>
+
+        <div
+          id="currencySheet"
+          class="absolute bottom-0 left-0 w-full bg-[#3a4526] flex flex-col gap-[24px] items-start overflow-clip px-[24px] py-[32px] rounded-[15px] shadow-[0px_4px_18px_rgba(0,0,0,0.35)]"
+        >
+          <div class="content-stretch flex items-start justify-between relative shrink-0 w-full">
+            <div class="content-stretch flex flex-col items-start leading-[normal] relative shrink-0 whitespace-nowrap">
+              <p class="dm-sans font-normal relative shrink-0 text-[24px] text-[#ffffff]">
+                Currency Symbols
+              </p>
+              <p class="dm-sans font-medium relative shrink-0 text-[16px] text-[#c8c8c8]">
+                Select your currency you want to convert
+              </p>
+            </div>
+            <button
+              id="currencySheetCloseBtn"
+              type="button"
+              class="dm-sans w-[40px] h-[40px] rounded-[15px] bg-[rgba(255,255,255,0.10)] text-[#ffffff] flex items-center justify-center"
+              aria-label="Close currency sheet"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div
+            id="currencySheetList"
+            class="flex flex-col gap-[16px] w-full overflow-y-auto"
+            style="max-height: 62vh"
+          >
+            <!-- populated by JS -->
+          </div>
         </div>
       </div>
     </div>

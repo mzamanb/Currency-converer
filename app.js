@@ -139,11 +139,21 @@ function applyFigmaTokenColors() {
   document.querySelectorAll(".key.dark").forEach((btn) => {
     btn.style.backgroundColor = primaryBg;
     btn.style.color = darkText;
+    const inner = btn.querySelector(".key-inner");
+    if (inner) {
+      inner.style.backgroundColor = primaryBg;
+      inner.style.color = darkText;
+    }
   });
 
   document.querySelectorAll(".key.bright").forEach((btn) => {
     btn.style.backgroundColor = secondaryBg;
     btn.style.color = lightText;
+    const inner = btn.querySelector(".key-inner");
+    if (inner) {
+      inner.style.backgroundColor = secondaryBg;
+      inner.style.color = lightText;
+    }
   });
 }
 
@@ -361,6 +371,36 @@ function wireUpSwap() {
   els.swapBtn.addEventListener("click", () => swapCurrencies());
 }
 
+function wireUpKeyboard() {
+  document.addEventListener("keydown", (e) => {
+    // If the currency sheet is open, keep only Escape handling from wireUpSheet.
+    if (!els.sheetOverlay.classList.contains("hidden")) return;
+
+    if (e.key === "Enter" || e.code === "NumpadEnter") {
+      e.preventDefault();
+      handleKey("equals");
+      return;
+    }
+
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      handleKey("backspace");
+      return;
+    }
+
+    if (/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+      handleKey(e.key);
+      return;
+    }
+
+    if (e.key === "." || e.code === "NumpadDecimal") {
+      e.preventDefault();
+      handleKey("dot");
+    }
+  });
+}
+
 async function loadRates() {
   try {
     // Public API: rates are "how many units per 1 USD"
@@ -380,6 +420,7 @@ applyFigmaTokenColors();
 wireUpKeypad();
 wireUpSheet();
 wireUpSwap();
+wireUpKeyboard();
 updateUI();
 
 // Fetch rates then recompute.
